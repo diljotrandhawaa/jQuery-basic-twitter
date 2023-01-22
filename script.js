@@ -61,7 +61,7 @@ $(document).ready(function($) {
       if (user.userName === newUser.userName) {
         console.log(user.userName);
         newUser.userImg = user.userImg;
-        users.push(newUser);
+        users.unshift(newUser);
         userIsUnique = false;
       }
       console.log(user.userName);
@@ -70,7 +70,7 @@ $(document).ready(function($) {
     if(userIsUnique === true) {
       newUser.userImg = usersProPics[usersProPics.length-1];
       usersProPics.pop();
-      users.push(newUser);
+      users.unshift(newUser);
     }
 
     console.log(users);
@@ -92,7 +92,10 @@ $(document).ready(function($) {
 
     console.log(hunUsers);
 
-    $(hunUsers[hunUsers.length-1]).appendTo('.users-div');
+    $(hunUsers[0]).prependTo('.users-div');
+
+    $('#user-name').val('');
+    $('#user-msg').val('');
   });
 
   var shuffleUsers = function(array) {
@@ -111,20 +114,35 @@ $(document).ready(function($) {
   };
 
   $('.random-btn').on('click', function() {
-    console.log('update btn is working');
-    if (hunUsers.length !== 0) {
-      var randomUsers = shuffleUsers(hunUsers);
+    if($(this).text() === 'Back') {
+      $(this).text('Update Feed');
+      if (hunUsers.length !== 0) {
+        var prevUsers = [...hunUsers];
+      } else {
+        prevUsers = [...exisUsers];
+      }
+      $('.user').remove();
+      $.each(prevUsers, function(index, user) {
+        $(user).appendTo('.users-div');
+      });
     } else {
-      randomUsers = shuffleUsers(exisUsers);
+      $(this).text('Back');
+      if (hunUsers.length !== 0) {
+        var randomUsers = shuffleUsers(hunUsers);
+      } else {
+        randomUsers = shuffleUsers(exisUsers);
+      }
+      $('.user').remove();
+      $.each(randomUsers, function(index, user) {
+        $(user).appendTo('.users-div');
+      });
     }
-    $('.user').remove();
-    $.each(randomUsers, function(index, user) {
-      $(user).appendTo('.users-div');
-    });
   });
 
   $('.users-div').on('click', '.user-name', function() {
     var filUserName = $(this).first().text();
+
+    $('.random-btn').text('Back');
 
     var filUsers = [];
     $.each(users, function(idx, user) {
