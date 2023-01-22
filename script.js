@@ -21,69 +21,11 @@ $(document).ready(function($) {
 
   var usersProPics = ['https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Yellow.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Black.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/White.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Brown.png.webp'];
 
-  var hunUsers = [];
-
-  var exisUsers = $.map(users, function(userObj) {
-    return $(`<div class='user'>
-    <table class="users-table">
-      <tbody><tr>
-        <td class="pro-img"><img src=${userObj.userImg}></td>
-        <td class="user-name">${userObj.userName}</td>
-        <td id="tweet-msg">${userObj.userMsg}</td>
-      </tr></tbody>
-    </table>
-    <img class="msg-noClick" name="message" width="18" src="assets/images/message.png">
-    <img class="heart-img" width="18" src="assets/images/heart.png" name="heart">
-    <img class="retweet-img" width="18" src="assets/images/retweet.png" name="retweet">
-    <img class="share-img" width="18" src="assets/images/share.png" name="share">
-  <div>`);
-  });
-
-  // function renderUsers(usersArray) {
-  //   $('.user').remove();
-  //   $.each(usersArray, function(index, user) {
-  //     $(user).appendTo('.users-div');
-  //   });
-  // }
-
-  $.each(exisUsers, function(index, user) {
-    $(user).appendTo('.users-div');
-  })
-
-  $('.form-btn').on('click', function() {
-    var userName = $('#user-name').val();
-    var userMsg = $('#user-msg').val();
-
-    if (userName.trim() === "") {
-      return;
-    }
-
-    var newUser = {
-      userName: userName,
-      userMsg: userMsg
-    };
-
-    var userIsUnique = true;
-    $.each(users, function(index, user) {
-      if (user.userName === newUser.userName) {
-        console.log(user.userName);
-        newUser.userImg = user.userImg;
-        users.unshift(newUser);
-        userIsUnique = false;
-      }
-      console.log(user.userName);
-    });
-
-    if(userIsUnique === true) {
-      newUser.userImg = usersProPics[usersProPics.length-1];
-      usersProPics.pop();
-      users.unshift(newUser);
-    }
-
-    console.log(users);
-    hunUsers = $.map(users, function(userObj) {
+  function renderUsers(usersArray) {
+    $('.user').remove();
+    var usersToRender = $.map(usersArray, function(userObj) {
       return $(`<div class='user'>
-      <table>
+      <table class="users-table">
         <tbody><tr>
           <td class="pro-img"><img src=${userObj.userImg}></td>
           <td class="user-name">${userObj.userName}</td>
@@ -96,10 +38,59 @@ $(document).ready(function($) {
       <img class="share-img" width="18" src="assets/images/share.png" name="share">
     <div>`);
     });
+    $.each(usersToRender, function(index, user) {
+      $(user).appendTo('.users-div');
+    });
+  }
 
-    console.log(hunUsers);
+  function filteredUsers(userName) {
+    var filUsers = [];
+    $.each(users, function(idx, user) {
+      if (user.userName === userName) {
+        filUsers.push(user);
+      }
+    });
+    return filUsers;
+  }
 
-    $(hunUsers[0]).prependTo('.users-div');
+  var hunUsers = [];
+
+  renderUsers(users);
+
+  $('.form-btn').on('click', function() {
+    var userName = $('#user-name').val();
+    var userMsg = $('#user-msg').val();
+
+    if (userName.trim() === "") {
+      return;
+    }
+
+    // console.log(users);
+    var newUser = {
+      userName: userName,
+      userMsg: userMsg
+    };
+
+    // console.log(newUser);
+
+    var userIsUnique = true;
+    // console.log(users);
+    for(var i = 0; i < users.length; i++) {
+      if (users[i]['userName'] === newUser.userName) {
+        newUser.userImg = users[i].userImg;
+        users.unshift(newUser);
+        userIsUnique = false;
+        i = users.length + 1;
+      }
+    };
+
+    // if(userIsUnique === true) {
+    //   newUser.userImg = usersProPics[usersProPics.length-1];
+    //   usersProPics.pop();
+    //   users.unshift(newUser);
+    // }
+
+    renderUsers(users);
 
     $('#user-name').val('');
     $('#user-msg').val('');
@@ -123,26 +114,10 @@ $(document).ready(function($) {
   $('.random-btn').on('click', function() {
     if($(this).text() === 'Back') {
       $(this).text('Update Feed');
-      if (hunUsers.length !== 0) {
-        var prevUsers = [...hunUsers];
-      } else {
-        prevUsers = [...exisUsers];
-      }
-      $('.user').remove();
-      $.each(prevUsers, function(index, user) {
-        $(user).appendTo('.users-div');
-      });
+      renderUsers(users);
     } else {
       $(this).text('Back');
-      if (hunUsers.length !== 0) {
-        var randomUsers = shuffleUsers(hunUsers);
-      } else {
-        randomUsers = shuffleUsers(exisUsers);
-      }
-      $('.user').remove();
-      $.each(randomUsers, function(index, user) {
-        $(user).appendTo('.users-div');
-      });
+      renderUsers(shuffleUsers(users));
     }
   });
 
@@ -151,32 +126,8 @@ $(document).ready(function($) {
 
     $('.random-btn').text('Back');
 
-    var filUsers = [];
-    $.each(users, function(idx, user) {
-      if (user.userName === filUserName) {
-        filUsers.push(user);
-      }
-    });
-    var filUsersToRender = $.map(filUsers, function(userObj) {
-      return $(`<div class='user'>
-      <table>
-        <tbody><tr>
-          <td class="pro-img"><img src=${userObj.userImg}></td>
-          <td class="user-name">${userObj.userName}</td>
-          <td id="tweet-msg">${userObj.userMsg}</td>
-        </tr></tbody>
-      </table>
-      <img class="msg-noClick" name="message" width="18" src="assets/images/message.png">
-      <img class="heart-img" width="18" src="assets/images/heart.png" name="heart">
-      <img class="retweet-img" width="18" src="assets/images/retweet.png" name="retweet">
-      <img class="share-img" width="18" src="assets/images/share.png" name="share">
-      <div>`);
-    });
-    $('.user').remove();
-    $.each(filUsersToRender, function(index, user) {
-      $(user).appendTo('.users-div');
-    });
-    });
+    renderUsers(filteredUsers(filUserName));
+  });
 
     function onHover(className) {
       $('.users-div').on('mouseenter', className, function() {
@@ -236,7 +187,8 @@ $(document).ready(function($) {
     $('.friends').on('click', function() {
       var clickedUser = $(this).text().slice(2);
       var clickedUsers = [];
-
+      $('.random-btn').text('Back');
+      renderUsers(filteredUsers(clickedUser));
     });
 
   });
