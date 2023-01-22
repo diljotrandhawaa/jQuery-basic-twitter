@@ -39,6 +39,13 @@ $(document).ready(function($) {
   <div>`);
   });
 
+  // function renderUsers(usersArray) {
+  //   $('.user').remove();
+  //   $.each(usersArray, function(index, user) {
+  //     $(user).appendTo('.users-div');
+  //   });
+  // }
+
   $.each(exisUsers, function(index, user) {
     $(user).appendTo('.users-div');
   })
@@ -216,5 +223,20 @@ $(document).ready(function($) {
     onClick('.msg-noClick', '.heart-img', '.retweet-img', '.share-img');
     onClick('.retweet-img', '.heart-img', '.msg-noClick', '.share-img');
     onClick('.share-img', '.retweet-img', '.heart-img', '.msg-noClick');
+
+    $('.friends-list').on('click', function() {
+      if ($(this).text() === 'Hide Friends') {
+        $(this).text('Show Friends');
+      } else {
+        $(this).text('Hide Friends');
+      }
+      $('.friends').toggleClass('no-show');
+    });
+
+    $('.friends').on('click', function() {
+      var clickedUser = $(this).text().slice(2);
+      var clickedUsers = [];
+
+    });
 
   });
