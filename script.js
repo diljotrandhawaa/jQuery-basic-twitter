@@ -84,11 +84,11 @@ $(document).ready(function($) {
       }
     };
 
-    // if(userIsUnique === true) {
-    //   newUser.userImg = usersProPics[usersProPics.length-1];
-    //   usersProPics.pop();
-    //   users.unshift(newUser);
-    // }
+    if(userIsUnique === true) {
+      newUser.userImg = usersProPics[usersProPics.length-1];
+      usersProPics.pop();
+      users.unshift(newUser);
+    }
 
     renderUsers(users);
 
