@@ -54,20 +54,15 @@ $(document).ready(function($) {
     return filUsers;
   }
 
-  var friends = $.map(users, function(user) {
-    return user.userName;
-  });
+  var friends = [];
 
   function addFriend(friendName) {
     var newFriend = $(`<div class="friends no-show">
     @ <a src="#">${friendName}</a>
     </div>`);
-    $(newFriend).appendTo('.add-friends');
+    $(newFriend).prependTo('.add-friends');
   }
 
-  $.each(friends, function(index, friend) {
-    addFriend(friend);
-  });
 
   var hunUsers = [];
 
@@ -81,16 +76,13 @@ $(document).ready(function($) {
       return;
     }
 
-    // console.log(users);
     var newUser = {
       userName: userName,
       userMsg: userMsg
     };
 
-    // console.log(newUser);
 
     var userIsUnique = true;
-    // console.log(users);
     for(var i = 0; i < users.length; i++) {
       if (users[i]['userName'] === newUser.userName) {
         newUser.userImg = users[i].userImg;
@@ -192,9 +184,17 @@ $(document).ready(function($) {
     onClick('.share-img', '.retweet-img', '.heart-img', '.msg-noClick');
 
     $('.friends-list').on('click', function() {
+      var errorMsg = $(`<div class="error-msg">Add New Friends</div>`);
       if ($(this).text() === 'Hide Friends') {
+        $('.error-msg').remove();
         $(this).text('Show Friends');
       } else {
+        if(!$(this).parent().find('.friends').length) {
+          $(errorMsg).css({'textDecoration': 'none', 'cursor': 'text'});
+          $(errorMsg).appendTo('.add-friends');
+        } else {
+          $('.error-msg').remove();
+        }
         $(this).text('Hide Friends');
       }
       $('.friends').toggleClass('no-show');
@@ -211,10 +211,19 @@ $(document).ready(function($) {
       var user = $(this).parent().find('.user-name').text();
       if(!friends.includes(user)) {
         friends.push(user);
+        $('.friends-list').text('Show Friends');
+        $('.error-msg').remove();
         $('.friends').remove();
         $.each(friends, function(index, friend) {
           addFriend(friend);
         });
+        $('.friends-list').addClass('friend-added');
+        setTimeout(function() {
+          $('.friends-list').removeClass('friend-added');
+        }, 200);
+      }
+      if (friends.includes(user)) {
+        $(this).html("<span>Friends</span> <img class='check-img' src='assets/images/check.png'>");
       }
     });
 
