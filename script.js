@@ -19,7 +19,7 @@ $(document).ready(function($) {
     },
   ];
 
-  var usersProPics = ['https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Yellow.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Black.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/White.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Brown.png.webp'];
+  var usersProPics = ['https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Yellow.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Black.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/White.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Brown.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Rose.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Banana.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Gray.png.webp', 'https://borderpolar.b-cdn.net/wp-content/uploads/2021/07/Tan.png.webp'];
 
   function renderUsers(usersArray) {
     $('.user').remove();
@@ -37,6 +37,7 @@ $(document).ready(function($) {
       <img class="retweet-img" width="18" src="assets/images/retweet.png" name="retweet">
       <img class="share-img" width="18" src="assets/images/share.png" name="share">
       <button class="add-friend" type="button">Add Friend</button>
+      <button class="remove-friend" type="button">Unfriend</button>
     <div>`);
     });
     $.each(usersToRender, function(index, user) {
@@ -220,10 +221,23 @@ $(document).ready(function($) {
         $('.friends-list').addClass('friend-added');
         setTimeout(function() {
           $('.friends-list').removeClass('friend-added');
-        }, 200);
+        }, 50);
+        $(this).css('right', '90px');
+        $(this).next().css('display', 'inline-block');
       }
       if (friends.includes(user)) {
         $(this).html("<span>Friends</span> <img class='check-img' src='assets/images/check.png'>");
+      }
+    });
+
+    $('.users-div').on('click', '.remove-friend', function() {
+      var userToRemove = $(this).parent().find('.user-name').text();
+      if (friends.includes(userToRemove)) {
+        friends.splice(friends.indexOf(userToRemove), 1);
+        $(`.friends:contains(${userToRemove})`).remove();
+        $(this).css('display', 'none');
+        $(this).prev().css('right', '30px');
+        $(this).prev().text('Add Friend');
       }
     });
 

@@ -177,7 +177,11 @@ body {
   margin: 9px 10px 3px 70px;
 }
 
-.add-friend {
+/* .users-div .share-img {
+  margin-right: 3px;
+} */
+
+.add-friend, .remove-friend {
   display: inline-block;
   padding: 4px;
   background-color: #0A64BC;
@@ -187,6 +191,11 @@ body {
   right: 30px;
   box-shadow: 2px 2px 5px #0A64BC;
   font-size: 12px;
+}
+
+.remove-friend {
+  right: 10px;
+  display: none;
 }
 
 .users-div .check-img {
