@@ -36,6 +36,7 @@ $(document).ready(function($) {
       <img class="heart-img" width="18" src="assets/images/heart.png" name="heart">
       <img class="retweet-img" width="18" src="assets/images/retweet.png" name="retweet">
       <img class="share-img" width="18" src="assets/images/share.png" name="share">
+      <button class="add-friend" type="button">Add Friend</button>
     <div>`);
     });
     $.each(usersToRender, function(index, user) {
@@ -52,6 +53,21 @@ $(document).ready(function($) {
     });
     return filUsers;
   }
+
+  var friends = $.map(users, function(user) {
+    return user.userName;
+  });
+
+  function addFriend(friendName) {
+    var newFriend = $(`<div class="friends no-show">
+    @ <a src="#">${friendName}</a>
+    </div>`);
+    $(newFriend).appendTo('.add-friends');
+  }
+
+  $.each(friends, function(index, friend) {
+    addFriend(friend);
+  });
 
   var hunUsers = [];
 
@@ -189,6 +205,17 @@ $(document).ready(function($) {
       var clickedUsers = [];
       $('.random-btn').text('Back');
       renderUsers(filteredUsers(clickedUser));
+    });
+
+    $('.users-div').on('click', '.add-friend', function() {
+      var user = $(this).parent().find('.user-name').text();
+      if(!friends.includes(user)) {
+        friends.push(user);
+        $('.friends').remove();
+        $.each(friends, function(index, friend) {
+          addFriend(friend);
+        });
+      }
     });
 
   });
