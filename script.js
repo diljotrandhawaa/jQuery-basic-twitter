@@ -58,9 +58,7 @@ $(document).ready(function($) {
   var friends = [];
 
   function addFriend(friendName) {
-    var newFriend = $(`<div class="friends no-show">
-    @ <a src="#">${friendName}</a>
-    </div>`);
+    var newFriend = $(`<div class="friends no-show">@ <a src="#">${friendName}</a></div>`);
     $(newFriend).prependTo('.add-friends');
   }
 
@@ -201,7 +199,7 @@ $(document).ready(function($) {
       $('.friends').toggleClass('no-show');
     });
 
-    $('.friends').on('click', function() {
+    $('.add-friends').on('click', '.friends', function() {
       var clickedUser = $(this).text().slice(2);
       var clickedUsers = [];
       $('.random-btn').text('Back');
