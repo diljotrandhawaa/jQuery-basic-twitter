@@ -101,14 +101,14 @@ body {
   padding: 15px;
   background-color: aliceblue;
   position: absolute;
-  top: 80px;
+  top: 132px;
   right: 10px;
 }
 
 .users-div {
   position: absolute;
   left: 23%;
-  top: 70px;
+  top: 120px;
   /* background-color: cadetblue; */
 }
 
@@ -151,6 +151,13 @@ body {
   border-radius: 8px;
   background: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
   margin: 10px 30px 10px 0px;
+}
+
+.random-btn {
+  margin: auto;
+  position: absolute;
+  top: 80px;
+  right: 36.4%;
 }
 
 .user {
